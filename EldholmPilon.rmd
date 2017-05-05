@@ -1,0 +1,25 @@
+```{r}
+require(dplyr)
+require(ggplot2)
+eldholmDup <- read.table("/Users/Leah/Desktop/R Files/eldholm.dup", header=F, sep='\t', na.strings="na")
+eldholmDup2 <- data.frame(stringr::str_split_fixed(eldholmDup$V1, "P", 2))
+eldholmDup2$start <- as.factor(eldholmDup$V2)
+eldholmDup2$stop <- as.factor(eldholmDup$V3)
+eldholmDup2$X2 <- NULL
+
+eldholmDup2$start=as.numeric(levels(eldholmDup2$start))[eldholmDup2$start]
+eldholmDup2$stop=as.numeric(levels(eldholmDup2$stop))[eldholmDup2$stop]
+
+p <- ggplot(eldholmDup2) +
+  geom_segment(aes(x=start, y=X1, xend=stop, yend=X1)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+p
+
+```
