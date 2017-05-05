@@ -1,0 +1,96 @@
+```{r}
+require(dplyr)
+require(ggplot2)
+dup <- read.table("/Users/Leah/Desktop/R Files/dup.txt", header=F, sep='\t', na.strings="na")
+names(dup) <- c("sample", "start", "stp", "duplication", "V5", "V6", "V7", "V8", "V9")
+dup2 <- data.frame(stringr::str_split_fixed(dup$sample, "/", 2))
+dup$samp <- as.factor(dup2$X1)
+
+preMetaDup <- read.table("/Users/Leah/Desktop/R Files/preMetaDup.txt", header=F, sep='\t', na.strings="na")
+preMetaDup2 <- data.frame(stringr::str_split_fixed(preMetaDup$V1, "_", 2))
+preMetaDup$samp <- as.factor(preMetaDup2$X1)
+
+postMetaDup <- read.table("/Users/Leah/Desktop/R Files/postMetaDup.txt", header=F, sep='\t', na.strings="na")
+postMetaDup2 <- data.frame(stringr::str_split_fixed(postMetaDup$V1, "P", 2))
+postMetaDup$samp <- as.factor(postMetaDup2$X1)
+
+type <- read.table("/Users/Leah/Desktop/R Files/metaDup.txt", header=F, sep='\t', na.strings="na") #postMeta
+type2 <- data.frame(stringr::str_split_fixed(type$V1, "P", 2))
+type$samp <- as.factor(type2$X1)
+
+
+p <- ggplot(dup) +
+  geom_segment(aes(x=start, y=samp, xend=stp, yend=samp, size = 100000)) +
+  xlab("Genomic Position") +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+        #legend.position="right",
+        #legend.title=element_blank(),
+        #axis.ticks.x=element_blank(),
+        #axis.text.x=element_blank(),
+        #axis.title.x=element_blank(),
+        #axis.title.y=element_text(vjust = 1, size = rel(2)),
+        #axis.line=element_line())
+p
+
+#pre-meta Brown
+q <- ggplot(preMetaDup) +
+  geom_segment(aes(x=V2, y=samp, xend=V3, yend=samp)) +
+  xlab("Genomic Position") +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+        #legend.position="right",
+        #legend.title=element_blank(),
+        #axis.ticks.x=element_blank(),
+        #axis.text.x=element_blank(),
+        #axis.title.x=element_blank(),
+        #axis.title.y=element_text(vjust = 1, size = rel(2)),
+        #axis.line=element_line())
+q
+preMetaDup$samp <- ordered(preMetaDup$samp, levels=c("ERR867528", "ERR867529", "ERR867532", "ERR867546", "ERR867547", "ERR867548", "ERR867549", "ERR867550", "ERR867551", "ERR867552", "ERR867553", "ERR867560", "ERR867561", "ERR867562", "ERR867563", "ERR867564", "ERR867518", "ERR867519", "ERR867520", "ERR867521", "ERR867522", "ERR867523", "ERR867524", "ERR867525", "ERR867526", "ERR867527", "ERR867538", "ERR867539", "ERR867541", "ERR867542", "ERR867543", "ERR867544", "ERR867545", "ERR867554", "ERR867555", "ERR867556", "ERR867557", "ERR867558", "ERR867559", "ERR867566", "ERR867567", "ERR867568", "ERR867569", "ERR867570", "ERR867571", "ERR867572", "ERR867573", "ERR867574", "ERR867575"))
+
+
+plot(q1)
+
+#post-meta Brown
+q <- ggplot(postMetaDup) +
+  geom_segment(aes(x=V2, y=samp, xend=V3, yend=samp)) +
+  xlab("Genomic Position") +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+        #legend.position="right",
+        #legend.title=element_blank(),
+        #axis.ticks.x=element_blank(),
+        #axis.text.x=element_blank(),
+        #axis.title.x=element_blank(),
+        #axis.title.y=element_text(vjust = 1, size = rel(2)),
+        #axis.line=element_line())
+q
+
+#post-meta Brown samples separated by culture and sputum
+t <- ggplot(type) +
+  geom_segment(aes(x=V2, y=V10, xend=V3, yend=V10)) +
+  xlab("Genomic Position") +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+        #legend.position="right",
+        #legend.title=element_blank(),
+        #axis.ticks.x=element_blank(),
+        #axis.text.x=element_blank(),
+        #axis.title.x=element_blank(),
+        #axis.title.y=element_text(vjust = 1, size = rel(2)),
+        #axis.line=element_line())
+t
+```
