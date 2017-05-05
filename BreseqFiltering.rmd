@@ -1,0 +1,45 @@
+```{r echo=FALSE}
+require(dplyr)
+require(reshape2)
+library(xlsx)
+#pre-metaNoTFlag
+breseqPreMetaNoT <- read.table("/Users/Leah/Desktop/R Files/preMetanoT.tsv", header=T, sep='\t', na.strings="na")
+breseqPreMetaNoT$freqchr <- as.character(breseqPreMetaNoT$frequency)
+preMetaNoT <- select(breseqPreMetaNoT, title, position, frequency)
+#finalpreMetaNoT <- filter(preMetaNoT, V9!=1)
+#e <- dcast(preMetaNoT, formula = position + frequency ~ title)
+#d <- dcast(preMetaNoT, formula = position ~ title)
+c <- dcast(preMetaNoT, position ~ title, fill = NA_real_, value.var = 'frequency', fun.aggregate = sum)
+c
+cNA <- na.omit(c)
+part1 <- cNA[cNA$ERR459440 != 1.00000000 & cNA$ERR459441 != 1.00000000 & cNA$ERR459442 != 1.00000000 & cNA$ERR459443 != 1.00000000 & cNA$ERR459444 != 1.00000000 & cNA$ERR459445 != 1.00000000 & cNA$ERR459446 != 1.00000000 & cNA$ERR459447 != 1.00000000 & cNA$ERR459448 != 1.00000000, ]
+part2 <- c[!complete.cases(c),]
+part3 <- rbind(part1, part2)
+final <- arrange(part3, position)
+write.csv(final, "BreseqFiltering.csv")
+
+
+#c_Filtered <- c %>% filter(c$ERR459440!=1.00000000 & c$ERR459441!=1.00000000 & c$ERR459442!=1.00000000 & c$ERR459443!=1.00000000 & c$ERR459444!=1.00000000 & c$ERR459445!=1.00000000 & c$ERR459446!=1.00000000 & c$ERR459447!=1.00000000 & c$ERR459448!=1.00000000)
+#d_Filtered <- filter(c, ERR459440!=1.00000000 & ERR459441!=1.00000000 & ERR459442!=1.00000000 & ERR459443!=1.00000000 & ERR459444!=1.00000000 & ERR459445!=1.00000000 & ERR459446!=1.00000000 & ERR459447!=1.00000000 & ERR459448!=1.00000000)
+#d <- c[which(c$ERR459440==100) & (c$ERR459441==100) & (c$ERR459442==100) & (c$ERR459443==100) & (c$ERR459444==100) & (c$ERR459445==100) & (c$ERR459446==100) & (c$ERR459447==100) & (c$ERR459448==100), ]
+#c$frequency=!1
+#f <- dcast(preMetaNoT, formula = V27 ~ V36 + V9)
+
+#post-metaTFlag
+#breseqPostMetaT <- read.table("/Users/Leah/Desktop/R Files/postMetaT.tsv", header=F, sep='\t', na.strings="na")
+#postMetaT <- select(breseqPostMetaT, V27, V9, V36, V38)
+#finalpostMetaT <- filter(postMetaT, V9!=1)
+
+#pre-metaTFlag
+#breseqPreMetaT <- read.table("/Users/Leah/Desktop/R Files/preMetaT.tsv", header=F, sep='\t', na.strings="na")
+#preMetaT <- select(breseqPreMetaT, V27, V9, V36, V38)
+#finalpreMetaT <- filter(preMetaT, V9!=1)
+
+#post-metaNoTFlag
+#breseqPostMetaNoT <- read.table("/Users/Leah/Desktop/R Files/postMetanoT.tsv", header=F, sep='\t', na.strings="na")
+#postMetaNoT <- select(breseqPostMetaNoT, V27, V9, V36, V38)
+#finalpostMetaNoT <- filter(postMetaNoT, V9!=1)
+
+#finalpreMetaT
+#finalpostMetaNoT
+```
