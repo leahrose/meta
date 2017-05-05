@@ -1,0 +1,245 @@
+```{r}
+require(dplyr)
+require(ggplot2)
+require(reshape2)
+
+file <- read.table("/Users/Leah/Desktop/R Files/210417_whamDupPreMeta.txt", header=F, sep='\t', na.strings="na")
+
+file$length <- file$V3-file$V2
+#file$length[file$length>=1000000] <- NA
+#fileNew <- na.omit(file)
+
+p <- ggplot(file) +
+  geom_segment(aes(x=V2, y=V1, xend=V3, yend=V1)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+p
+
+filePostMeta <- read.table("/Users/Leah/Desktop/R Files/210417_whamDupPostMeta.txt", header=F, sep='\t', na.strings="na")
+
+filePostMeta$length <- filePostMeta$V3-filePostMeta$V2
+#filePostMeta$length[filePostMeta$length>=700000] <- NA
+#fileNew2 <- na.omit(filePostMeta)
+
+o <- ggplot(filePostMeta) +
+  geom_segment(aes(x=V2, y=V1, xend=V3, yend=V1)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+o
+
+
+brownPreDup <- read.table("/Users/Leah/Desktop/R Files/210417_whamBrownPreMeta.txt", header=F, sep='\t', na.strings="na")
+colnames(brownPreDup) <- c("ERS", "start", "stp")
+brownPreDup$length <- brownPreDup$stp-brownPreDup$start
+#brownPreDup$length[brownPreDup$length>=500000] <- NA
+#file3 <- na.omit(brownPreDup)
+
+q <- ggplot(brownPreDup) +
+  geom_segment(aes(x=start, y=ERS, xend=stp, yend=ERS)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+q
+
+brownPostDup <- read.table("/Users/Leah/Desktop/R Files/210417_whamBrownPostMeta.txt", header=F, sep='\t', na.strings="na")
+colnames(brownPostDup) <- c("ERS", "start", "stp")
+brownPostDup$length <- brownPostDup$stp-brownPostDup$start
+#brownPostDup$length[brownPostDup$length>=500000] <- NA
+#file4 <- na.omit(brownPostDup)
+
+w <- ggplot(brownPostDup) +
+  geom_segment(aes(x=start, y=ERS, xend=stp, yend=ERS)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+w
+
+EldholmPreERR47 <- read.table("/Users/Leah/Desktop/R Files/ERR47DupPreEldholm.txt", header=F, sep='\t', na.strings="na")
+
+EldholmPreERR47$length <- EldholmPreERR47$V3-EldholmPreERR47$V2
+EldholmPreERR47$length[EldholmPreERR47$length>=500000] <- NA
+file5 <- na.omit(EldholmPreERR47)
+
+z <- ggplot(file5) +
+  geom_segment(aes(x=V2, y=V1, xend=V3, yend=V1)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+z
+
+EldholmPreERR44 <- read.table("/Users/Leah/Desktop/R Files/ERR44DupPreEldholm.txt", header=F, sep='\t', na.strings="na")
+
+EldholmPreERR44$length <- EldholmPreERR44$V3-EldholmPreERR44$V2
+EldholmPreERR44$length[EldholmPreERR44$length>=500000] <- NA
+file6 <- na.omit(EldholmPreERR44)
+
+y <- ggplot(file6) +
+  geom_segment(aes(x=V2, y=V1, xend=V3, yend=V1)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+y
+
+#geom_freqpoly(file6$V2, aes()) + geom_histogram()
+ggplot(file, aes(file$length)) + geom_histogram(bins = 100)
+ggplot(filePostMeta, aes(x = filePostMeta$length)) + geom_histogram(bins = 100)
+ggplot(brownPreDup, aes(x = brownPreDup$length)) + geom_histogram(bins = 100)
+ggplot(brownPostDup, aes(x = brownPostDup$length)) + geom_histogram(bins = 100)
+
+#Matching Brown graphs with pairs and separating them by culture and sputum
+brownPipelineIN <- read.table("/Users/Leah/Desktop/R Files/Brown_pipelineIN.txt", header=F, sep='\t', na.strings="na")
+newmatch <- read.table("/Users/Leah/Desktop/NewMatch.txt", header=F, sep='\t', na.strings="na")
+colnames(brownPipelineIN) <- c("ERR", "ERS", "ERX", "Illumina", "Paired", "Patient", "Mtb")
+colnames(newmatch) <- c("Mtb", "Type", "Enriched", "ERR")
+combine <- full_join(brownPreDup, brownPipelineIN, by="ERS")
+combine2 <- left_join(combine, newmatch, by="ERR")
+
+#combine$length <- EldholmPreERR44$V3-EldholmPreERR44$V2
+#combine$length[combine$length>=1500000] <- NA
+#combine1 <- na.omit(combine)
+
+#Matched with culture and sputum
+combine$ERR <- ordered(combine$ERR, levels=c("ERR867528", "ERR867518", "ERR867529", "ERR867519", "ERR867530", "ERR867520", "ERR867531", "ERR867521", "ERR867532", "ERR867522", "ERR867533", "ERR867523", "ERR867534", "ERR867524", "ERR867535", "ERR867525", "ERR867536", "ERR867526", "ERR867537", "ERR867527", "ERR867546", "ERR867538", "ERR867548", "ERR867540", "ERR867549", "ERR867541", "ERR867551", "ERR867543", "ERR867560", "ERR867554", "ERR867561", "ERR867555", "ERR867562", "ERR867556", "ERR867563", "ERR867557", "ERR867564", "ERR867558", "ERR867565", "ERR867559"))
+
+#Separated by culture and sputum
+combine$ERR <- ordered(combine$ERR, levels=c("ERR867528", "ERR867529", "ERR867530", "ERR867531", "ERR867532", "ERR867533", "ERR867534", "ERR867535", "ERR867536", "ERR867537", "ERR867546", "ERR867547", "ERR867548", "ERR867549", "ERR867551", "ERR867560", "ERR867561", "ERR867562", "ERR867563", "ERR867564", "ERR867565", "ERR867518", "ERR867519", "ERR867520", "ERR867521", "ERR867522", "ERR867523", "ERR867524", "ERR867525", "ERR867526", "ERR867527", "ERR867538", "ERR867539", "ERR867540", "ERR867541", "ERR867543", "ERR867554", "ERR867555", "ERR867556", "ERR867557", "ERR867558", "ERR867559"))
+
+y <- ggplot(combine) +
+  geom_segment(aes(x=start, y=ERR, xend=stp, yend=ERR)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+y
+
+```
+
+```{r}
+df <- combine2[combine2$Patient != 1 & combine2$Patient != 12,]
+df <- na.omit(df) 
+
+meta <- na.omit(df)
+meta <- meta[,c('ERS','ERR','ERX','Patient','Mtb.x','Type','Enriched')]
+meta <- unique(meta)
+
+df$dup <- paste(df$start, ":", df$stp, sep="")
+df$dup <- as.factor(df$dup)
+
+df.count.m <- df %>%
+  group_by(Type) %>%
+  count(dup)
+
+df.count <- dcast(df.count.m, dup ~ Type)
+df.count[is.na(df.count)] <- 0
+df.count$Culture_noDup = 18 - df.count$Culture
+df.count$Sputum_noDup = 18 - df.count$Sputum
+
+names(df.count) <- c("dup", "Culture", "Sputum", "Culture_noDup", "Sputum_noDup")
+df.count <- df.count %>%
+  rowwise() %>%
+  mutate(OR = (Sputum/Sputum_noDup)/(Culture/Culture_noDup))
+is.na(df.count) <- sapply(df.count, is.infinite)
+
+df.count <- arrange(df.count, desc(OR))
+
+
+df.count.pat.m <- df %>%
+  group_by(Type, Patient) %>%
+  count(dup)
+```
+
+```{r}
+#Matching Brown graphs with pairs and separating them by culture and sputum
+brownPipelineIN <- read.table("/Users/Leah/Desktop/R Files/Brown_pipelineIN.txt", header=F, sep='\t', na.strings="na")
+newmatch <- read.table("/Users/Leah/Desktop/NewMatch.txt", header=F, sep='\t', na.strings="na")
+colnames(brownPipelineIN) <- c("ERR", "ERS", "ERX", "Illumina", "Paired", "Patient", "Mtb")
+colnames(newmatch) <- c("Mtb", "Type", "Enriched", "ERR")
+comb <- full_join(brownPostDup, brownPipelineIN, by="ERS")
+comb2 <- left_join(comb, newmatch, by="ERR")
+
+#Matched with culture and sputum
+comb2$ERR <- ordered(comb2$ERR, levels=c("ERR867528", "ERR867518", "ERR867529", "ERR867519", "ERR867530", "ERR867520", "ERR867531", "ERR867521", "ERR867532", "ERR867522", "ERR867533", "ERR867523", "ERR867534", "ERR867524", "ERR867535", "ERR867525", "ERR867536", "ERR867526", "ERR867537", "ERR867527", "ERR867546", "ERR867538", "ERR867548", "ERR867540", "ERR867549", "ERR867541", "ERR867551", "ERR867543", "ERR867560", "ERR867554", "ERR867561", "ERR867555", "ERR867562", "ERR867556", "ERR867563", "ERR867557", "ERR867564", "ERR867558", "ERR867565", "ERR867559"))
+
+#Separated by culture and sputum
+comb2$ERR <- ordered(comb2$ERR, levels=c("ERR867528", "ERR867529", "ERR867530", "ERR867531", "ERR867532", "ERR867533", "ERR867534", "ERR867535", "ERR867536", "ERR867537", "ERR867546", "ERR867547", "ERR867548", "ERR867549", "ERR867551", "ERR867560", "ERR867561", "ERR867562", "ERR867563", "ERR867564", "ERR867565", "ERR867518", "ERR867519", "ERR867520", "ERR867521", "ERR867522", "ERR867523", "ERR867524", "ERR867525", "ERR867526", "ERR867527", "ERR867538", "ERR867539", "ERR867540", "ERR867541", "ERR867543", "ERR867554", "ERR867555", "ERR867556", "ERR867557", "ERR867558", "ERR867559"))
+
+y <- ggplot(comb2) +
+  geom_segment(aes(x=start, y=ERR, xend=stp, yend=ERR)) +
+  xlab("Genomic Position") +
+  scale_x_continuous() +
+  theme(plot.background=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major = element_blank(),
+        #axis.text.x=element_blank(),
+        panel.grid.minor = element_blank())
+y
+
+df3 <- comb2[comb2$Patient != 1 & comb2$Patient != 12,]
+df3 <- na.omit(df3) 
+
+meta3 <- na.omit(df3)
+meta3 <- meta3[,c('ERS','ERR','ERX','Patient','Mtb.x','Type','Enriched')]
+meta3 <- unique(meta3)
+
+df3$dup <- paste(df3$start, ":", df3$stp, sep="")
+df3$dup <- as.factor(df3$dup)
+
+df3.count.m <- df3 %>%
+  group_by(Type) %>%
+  count(dup)
+
+df3.count <- dcast(df3.count.m, dup ~ Type)
+df3.count[is.na(df3.count)] <- 0
+df3.count$Culture_noDup = 18 - df3.count$Culture
+df3.count$Sputum_noDup = 18 - df3.count$Sputum
+
+names(df3.count) <- c("dup", "Culture", "Sputum", "Culture_noDup", "Sputum_noDup")
+df3.count <- df3.count %>%
+  rowwise() %>%
+  mutate(OR = (Sputum/Sputum_noDup)/(Culture/Culture_noDup))
+is.na(df3.count) <- sapply(df3.count, is.infinite)
+
+df3.count <- arrange(df3.count, desc(OR))
+
+
+df.count.pat.m <- df %>%
+  group_by(Type, Patient) %>%
+  count(dup)
+```
